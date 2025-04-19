@@ -1,0 +1,44 @@
+[user]
+name = "Björn Steinbrink"
+email = "bsteinbr@gmail.com"
+
+[ui]
+editor = "vim"
+pager = ["delta", "--syntax-theme", "ansi"]
+diff.format = "git"
+conflict-marker-style = "git"
+default-command = ["util", "exec", "--", "bash", "-c", "jj --no-pager log -r 'sym(trunk(),@)' -T builtin_log_oneline; echo; jj diff --ignore-working-copy -s"]
+diff-editor = ":builtin"
+
+[aliases]
+switch = ["rebase", "-r", "@", "-d"]
+update = ["rebase", "-d", "trunk()"]
+insert = ["new", "--no-edit"]
+review = ["log", "--no-graph", "--reversed", "-p", "-r", "trunk()..@"]
+l = ["log"]
+f = ["git", "fetch", "--all-remotes"]
+m = ["new", "trunk()"]
+p = ["git", "push"]
+newfeat = ["new", "--no-edit", "-B", "@", "-A", "fork_point(trunk()|@)"]
+
+[templates]
+log = "builtin_log_compact_full_description"
+draft_commit_description = '''
+concat(
+  description,
+  surround(
+    "\nJJ: Diff Stat:\n", "",
+    indent("JJ:     ", diff.stat(72)),
+  ),
+  "\nJJ: ignore-rest\n",
+  diff.git(),
+)
+'''
+
+[revset-aliases]
+'sym(x,y)' = 'x..y | y..x | fork_point(x|y)'
+
+[lazyjj]
+layout = "vertical"
+layout-percent = 20
+diff-tool = "lazydelta"
