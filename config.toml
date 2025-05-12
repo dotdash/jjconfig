@@ -7,7 +7,7 @@ editor = "vim"
 pager = ["delta", "--syntax-theme", "ansi"]
 diff.format = "git"
 conflict-marker-style = "git"
-default-command = ["util", "exec", "--", "bash", "-c", "jj --no-pager log -r 'sym(trunk(),@)' -T builtin_log_oneline; echo; jj diff --ignore-working-copy -s"]
+default-command = ["util", "exec", "--", "bash", "-c", "jj --no-pager log -r 'current()' -T builtin_log_oneline; echo; jj diff --ignore-working-copy -s"]
 diff-editor = ":builtin"
 
 [aliases]
@@ -36,6 +36,8 @@ concat(
 '''
 
 [revset-aliases]
+'current()' = 'fork_point(trunk()|@)-..@'
+'work(x)' = 'fork_point(trunk()|x)-..x|current()'
 'sym(x,y)' = 'x..y | y..x | fork_point(x|y)'
 
 [lazyjj]
